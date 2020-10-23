@@ -1,4 +1,5 @@
-﻿using hurricaneapi.Services;
+﻿using System.Collections;
+using hurricaneapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hurricaneapi.Controllers
@@ -7,20 +8,27 @@ namespace hurricaneapi.Controllers
     [Controller]
     public class HurricaneController : ControllerBase
     {
-        private HurricaneService hurricaneService { get; }
+        private HurricaneService HurricaneService { get; }
+
         public HurricaneController(HurricaneService hurricaneService)
         {
-            this.hurricaneService = hurricaneService;
+            this.HurricaneService = hurricaneService;
         }
+
         // GET
         [Route("fetch")]
         [HttpGet]
         public ActionResult Get()
         {
-            hurricaneService.FetchFiles();
+            HurricaneService.FetchFiles();
             return Ok();
         }
 
-        
+        [Route("api")]
+        [HttpGet]
+        public string GetHurricanes([FromQuery] string query)
+        {
+            return HurricaneService.GetHurricanes();
+        }
     }
 }
