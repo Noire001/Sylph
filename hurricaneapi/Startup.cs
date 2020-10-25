@@ -30,6 +30,12 @@ namespace hurricaneapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.Configure<HurricaneDatabaseSettings>(
+                Configuration.GetSection(nameof(HurricaneDatabaseSettings)));
+
+            services.AddSingleton<HurricaneDatabaseSettings.IHurricaneDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<HurricaneDatabaseSettings>>().Value);
+
             services.AddControllers();
             services.AddTransient<HurricaneService>();
 
