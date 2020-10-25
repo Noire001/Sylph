@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using hurricaneapi.Jobs;
+using hurricaneapi.Models;
 using hurricaneapi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl;
 
@@ -30,6 +32,25 @@ namespace hurricaneapi
             services.AddRazorPages();
             services.AddControllers();
             services.AddTransient<HurricaneService>();
+
+            services.AddQuartz(q =>
+            {
+                q.SchedulerId = "JobScheduler";
+                q.SchedulerName = "Job Scheduler";
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                q.AddJob<HurricaneCsvJob>(j => j.WithIdentity("hurricaneJob"));
+                q.AddTrigger(t => t
+                    .WithIdentity("hurricaneJobTrigger")
+                    .ForJob("hurricaneJob")
+                    .StartNow()
+                    .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
+                );
+            });
+            
+            services.AddQuartzServer(options =>
+            {
+                options.WaitForJobsToComplete = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,32 +79,6 @@ namespace hurricaneapi
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
-            DoWork();
-        }
-
-        async void DoWork()
-        {
-            StdSchedulerFactory factory = new StdSchedulerFactory();
-
-// get a scheduler
-            IScheduler scheduler = await factory.GetScheduler();
-            await scheduler.Start();
-
-// define the job and tie it to our HurricaneCsvJob class
-            IJobDetail job = JobBuilder.Create<HurricaneCsvJob>()
-                .WithIdentity("myJob", "group1")
-                .Build();
-
-// Trigger the job to run now, and then every 40 seconds
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("myTrigger", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(24)
-                    .RepeatForever())
-                .Build();
-
-            await scheduler.ScheduleJob(job, trigger);
         }
     }
 }
