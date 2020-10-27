@@ -5,7 +5,6 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using hurricaneapi.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic.FileIO;
 using MongoDB.Driver;
 using Quartz;
@@ -48,14 +47,31 @@ namespace hurricaneapi.Jobs
                 rowList.Add(row);
             }
 
+            List<double[]> coordsList = new List<double[]>();
+
             for (int i = 2; i < rowList.Count - 1; i++)
             {
+                coordsList.Add(new[] {Convert.ToDouble(rowList[i][8]), Convert.ToDouble(rowList[i][9])});
+
                 if (rowList[i][0] != rowList[i + 1][0] || (i + 3) == rowList.Count)
-                    hurricaneList.Add(new Hurricane(rowList[i][0]));
+                {
+                    hurricaneList.Add(new Hurricane(rowList[i][0], new List<double[]>(coordsList)));
+                    coordsList.Clear();
+                }
             }
 
-            collection.InsertMany(hurricaneList);
-            File.WriteAllText("hurricanes.json", JsonSerializer.Serialize(hurricaneList));
+            InsertManyOptions options = new InsertManyOptions();
+            options.IsOrdered = false;
+            try
+            {
+                collection.InsertMany(hurricaneList, options);
+            }
+            catch (MongoBulkWriteException e)
+            {
+            }
+
+            File.WriteAllText("hurricanes.json",
+                JsonSerializer.Serialize(collection.Find<Hurricane>(hurricane => true).ToList()));
             return Task.CompletedTask;
         }
     }

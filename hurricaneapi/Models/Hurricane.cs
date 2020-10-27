@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace hurricaneapi.Models
@@ -7,9 +7,15 @@ namespace hurricaneapi.Models
     {
         [BsonId]
         public string id { get; set; }
-        public Hurricane(string id)
+        [BsonElement("coordinates")]
+        public IEnumerable<double[]> coordsList { get; set; }
+
+        public Hurricane(string id,IEnumerable<double[]> coordsList)
         {
             this.id = id;
+            this.coordsList = coordsList;
         }
+        
+        
     }
 }
