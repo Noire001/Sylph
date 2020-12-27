@@ -1,25 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Linq;
 using hurricaneapi.Models;
-using Microsoft.VisualBasic.FileIO;
+using MongoDB.Driver;
 
 namespace hurricaneapi.Services
 {
     public class HurricaneService
     {
-        
-        public void FetchFiles()
+        private IMongoCollection<Hurricane> collection;
+        public HurricaneService(HurricaneDatabaseSettings.IHurricaneDatabaseSettings settings)
         {
-            
+            MongoClient client = new MongoClient(settings.ConnectionString);
+            IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
+            collection = database.GetCollection<Hurricane>(settings.HurricaneCollectionName);
         }
 
-        public string GetHurricanes()
+        public List<Hurricane> GetAllHurricanes()
         {
-            return File.ReadAllText("hurricanes.json");
+            return collection.Find(hurricane => true).ToList();
+        }
+
+        public List<Hurricane> GetHurricane(long startdate, long enddate, int maxspeed)
+        {
+            
+            var filter = Builders<Hurricane>.Filter;
+            var startDateFilter = filter.Gte("times.0", startdate);
+            var endDateFilter = filter.Lte("times.0", enddate);
+            var maxSpeedFilter = filter.Lte("speed.0", maxspeed);
+            return collection.Find(startDateFilter & endDateFilter & maxSpeedFilter).ToList();
         }
     }
 }

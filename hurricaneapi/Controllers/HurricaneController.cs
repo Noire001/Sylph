@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using hurricaneapi.Models;
 using hurricaneapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,20 +17,17 @@ namespace hurricaneapi.Controllers
             this.HurricaneService = hurricaneService;
         }
 
-        // GET
-        [Route("fetch")]
-        [HttpGet]
-        public ActionResult Get()
-        {
-            HurricaneService.FetchFiles();
-            return Ok();
-        }
 
-        [Route("api")]
         [HttpGet]
-        public string GetHurricanes([FromQuery] string query)
+        public List<Hurricane> GetHurricanes()
         {
-            return HurricaneService.GetHurricanes();
+            return HurricaneService.GetAllHurricanes();
+        }
+        [Route("api")]
+        [HttpGet("{startdate:long?}/{enddate:long?}/{maxspeed:long?}")]
+        public List<Hurricane> Get(long startdate = 0, long enddate = Int64.MaxValue, int maxspeed = Int32.MaxValue)
+        {
+            return HurricaneService.GetHurricane( startdate, enddate, maxspeed);
         }
     }
 }
