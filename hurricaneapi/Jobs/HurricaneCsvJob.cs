@@ -113,8 +113,10 @@ namespace hurricaneapi.Jobs
             options.IsOrdered = false;
             try
             {
-                collection.DeleteMany(hurricane => true);
-                collection.InsertMany(hurricaneList, options);
+                foreach (var h in hurricaneList)
+                {
+                    collection.ReplaceOneAsync(hurricane => hurricane.id.Equals(h.id), h,new ReplaceOptions() {IsUpsert = true});
+                }
             }
             catch (MongoBulkWriteException e)
             {
