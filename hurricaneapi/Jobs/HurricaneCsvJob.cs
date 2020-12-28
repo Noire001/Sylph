@@ -55,7 +55,7 @@ namespace hurricaneapi.Jobs
             List<double[]> coordsList = new List<double[]>();
             List<long> timeList = new List<long>();
             List<int> speedList = new List<int>();
-
+            int maxSpeed = 0;
             for (int i = 2; i < rowList.Count - 1; i++)
             {
                 coordsList.Add(new[] {Convert.ToDouble(rowList[i][8]), Convert.ToDouble(rowList[i][9])});
@@ -63,13 +63,18 @@ namespace hurricaneapi.Jobs
                 long unixTime = ((DateTimeOffset) dateTime).ToUnixTimeMilliseconds();
                 timeList.Add(unixTime);
                 speedList.Add(Convert.ToInt32(rowList[i][161]));
+                if (Convert.ToInt32(rowList[i][161]) > maxSpeed){
+                    maxSpeed = Convert.ToInt32(rowList[i][161]);
+                }
+                    
                 if (rowList[i][0] != rowList[i + 1][0] || (i + 3) == rowList.Count)
                 {
                     hurricaneList.Add(new Hurricane(rowList[i][0], new List<double[]>(coordsList),
-                        new List<long>(timeList), new List<int>(speedList), rowList[i][5], false));
+                        new List<long>(timeList), new List<int>(speedList), rowList[i][5], false, maxSpeed));
                     coordsList.Clear();
                     timeList.Clear();
                     speedList.Clear();
+                    maxSpeed = 0;
                 }
             }
 

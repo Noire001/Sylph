@@ -23,7 +23,10 @@ namespace hurricaneapi.Models
         [BsonElement("active")]
         [JsonPropertyName("active")]
         public bool IsActive { get; set; }
-        public Hurricane(string id,IEnumerable<double[]> coordsList,IEnumerable<long> timeList, IEnumerable<int> speedList, string name, bool IsActive)
+        [BsonElement("maxSpeed")]
+        [JsonPropertyName("maxSpeed")]
+        public int maxSpeed {get; set;}
+        public Hurricane(string id,IEnumerable<double[]> coordsList,IEnumerable<long> timeList, IEnumerable<int> speedList, string name, bool IsActive, int maxSpeed)
         {
             this.id = id;
             this.coordsList = coordsList;
@@ -31,6 +34,7 @@ namespace hurricaneapi.Models
             this.timeList = timeList;
             this.IsActive = IsActive;
             this.speedList = speedList;
+            this.maxSpeed = maxSpeed;
         }
         
         
