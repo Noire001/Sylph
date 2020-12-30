@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using hurricaneapi.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -27,8 +25,8 @@ namespace hurricaneapi.Services
             
             var filter = Builders<Hurricane>.Filter;
             
-            var startDateFilter = filter.Gte("times.0", startdate);
-            var endDateFilter = filter.Lte("times.0", enddate);
+            var startDateFilter = filter.Gte("datapoints.0.time", startdate);
+            var endDateFilter = filter.Lte("datapoints.0.time", enddate);
             var maxSpeedFilter = filter.Lte("maxSpeed", maxspeed);
             var activeFilter = filter.Eq("active", active == 1?true:false);
             var nameFilter = filter.Regex("name", new BsonRegularExpression(name.ToUpper()));
@@ -40,7 +38,6 @@ namespace hurricaneapi.Services
 
             if (active != 0 && active != 1) //not filtering activity, show both active & inactive
                 return collection.Find(startDateFilter & endDateFilter & maxSpeedFilter & nameFilter).Sort(sortDefinition).ToList();
-            //we are filtering activity, return either active or non-active explicitly
             return collection.Find(startDateFilter & endDateFilter & maxSpeedFilter & activeFilter & nameFilter).Sort(sortDefinition).ToList();
         }
     }
