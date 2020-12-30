@@ -10,4 +10,8 @@
       <PackageReference Include="Quartz.AspNetCore" Version="3.2.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data" />
+    </ItemGroup>
+
 </Project>
