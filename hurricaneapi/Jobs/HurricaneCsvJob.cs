@@ -54,8 +54,11 @@ namespace hurricaneapi.Jobs
 
             List<DataPoints> dataPointList = new List<DataPoints>();
             int maxSpeed = 0;
+            int sumSpeed = 0;
+            int hurricaneDataPointArraySize = 0;
             for (int i = 2; i < rowList.Count - 1; i++)
             {
+                
                 DateTime dateTime = DateTime.ParseExact(rowList[i][6], "yyyy-MM-dd HH:mm:ss", null);
                 long unixTime = ((DateTimeOffset) dateTime).ToUnixTimeMilliseconds();
                 dataPointList.Add(new DataPoints(Convert.ToDouble(rowList[i][8]), Convert.ToDouble(rowList[i][9]), unixTime, Convert.ToInt32(rowList[i][161])));
@@ -65,13 +68,18 @@ namespace hurricaneapi.Jobs
                     maxSpeed = Convert.ToInt32(rowList[i][161]);
                 }
 
+                sumSpeed += Convert.ToInt32(rowList[i][161]);
+
                 if (rowList[i][0] != rowList[i + 1][0] || (i + 3) == rowList.Count)
                 {
                     hurricaneList.Add(new Hurricane(rowList[i][0], new List<DataPoints>(dataPointList), rowList[i][5], false,
-                        maxSpeed));
+                        maxSpeed, (float) sumSpeed/hurricaneDataPointArraySize));
                     dataPointList.Clear();
                     maxSpeed = 0;
+                    hurricaneDataPointArraySize = 0;
+                    sumSpeed = 0;
                 }
+                hurricaneDataPointArraySize++;
             }
 
             var activeParser = new TextFieldParser("Data/active.csv");

@@ -45,13 +45,17 @@ namespace hurricaneapi.Models
         [BsonElement("maxSpeed")]
         [JsonPropertyName("maxSpeed")]
         public int maxSpeed {get; set;}
-        public Hurricane(string id,IEnumerable<DataPoints> coordsList, string name, bool IsActive, int maxSpeed)
+        [BsonElement("averageSpeed")]
+        [JsonPropertyName("averageSpeed")]
+        public float averageSpeed { get; set; }
+        public Hurricane(string id,IEnumerable<DataPoints> coordsList, string name, bool IsActive, int maxSpeed, float averageSpeed)
         {
             this.id = id;
             this.coordsList = coordsList;
             this.name = name;
             this.IsActive = IsActive;
             this.maxSpeed = maxSpeed;
+            this.averageSpeed = averageSpeed;
         }
         
         
