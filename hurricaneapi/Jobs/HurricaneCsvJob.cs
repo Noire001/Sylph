@@ -14,13 +14,13 @@ namespace hurricaneapi.Jobs
 {
     public class HurricaneCsvJob : IJob
     {
-        private IMongoCollection<Hurricane> collection;
+        private readonly IMongoCollection<Hurricane> _collection;
 
         public HurricaneCsvJob(HurricaneDatabaseSettings.IHurricaneDatabaseSettings settings)
         {
             MongoClient client = new MongoClient(settings.ConnectionString);
             IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
-            collection = database.GetCollection<Hurricane>(settings.HurricaneCollectionName);
+            _collection = database.GetCollection<Hurricane>(settings.HurricaneCollectionName);
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -108,6 +108,7 @@ namespace hurricaneapi.Jobs
                 for (int j = hurricaneList.Count - 1; j >= 0; j--)
                 {
                     if (activeHurricaneIds[i] != hurricaneList[j].id) continue;
+                    
                     hurricaneList[j].IsActive = true;
                     break;
                 }
@@ -115,19 +116,14 @@ namespace hurricaneapi.Jobs
 
             InsertManyOptions options = new InsertManyOptions();
             options.IsOrdered = false;
-            try
-            {
+            
                 foreach (var h in hurricaneList)
                 {
-                    collection.ReplaceOneAsync(hurricane => hurricane.id.Equals(h.id), h,
-                        new ReplaceOptions() {IsUpsert = true});
+                    _collection.ReplaceOneAsync(hurricane => hurricane.id.Equals(h.id), h,
+                        new ReplaceOptions {IsUpsert = true});
                 }
-            }
-            catch (MongoBulkWriteException e)
-            {
-            }
-            
-            return Task.CompletedTask;
+
+                return Task.CompletedTask;
         }
     }
 }
