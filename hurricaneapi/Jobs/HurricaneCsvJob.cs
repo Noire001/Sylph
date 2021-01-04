@@ -60,7 +60,7 @@ namespace hurricaneapi.Jobs
             {
                 
                 DateTime dateTime = DateTime.ParseExact(rowList[i][6], "yyyy-MM-dd HH:mm:ss", null);
-                long unixTime = ((DateTimeOffset) dateTime).ToUnixTimeMilliseconds();
+                long unixTime = ((DateTimeOffset) dateTime).ToUnixTimeSeconds();
                 dataPointList.Add(new DataPoints(Convert.ToDouble(rowList[i][8]), Convert.ToDouble(rowList[i][9]), unixTime, Convert.ToInt32(rowList[i][161])));
                 
                 if (Convert.ToInt32(rowList[i][161]) > maxSpeed)
