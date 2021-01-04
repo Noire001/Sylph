@@ -5,11 +5,16 @@ hurricaneapi is an ASP.NET web service that parses tropical cyclone CSV data fro
 
 #### Table of Contents
 * [Compilation](#Compilation)
-   * [Prerequisites](#Prerequisites)
-   * [Configuration](#Configuration)
-   * [Build](#Build)
-   * [Deploy](#Deploy)
+  * [Prerequisites](#Prerequisites)
+  * [Configuration](#Configuration)
+  * [Build](#Build)
+  * [Deploy](#Deploy)
+  
 * [Usage](#Usage)
+  * [API Endpoint](#api-endpoint)
+  * [Queries](#queries)
+  * [Response Properties](#response-properties)
+  
 
 
 ## Compilation
@@ -50,10 +55,10 @@ Your deployment environment must support ASP.NET Core 5.0, like [Azure](https://
 The parsed data is small enough to fit in a free [MongoDB Atlas](https://www.mongodb.com/cloud/atlas "MongoDB Atlas") instance.
 
 ## Usage
-#### API Endpoint
+### API Endpoint
 `https://{host}/hurricane/api`
 
-#### Queries
+### Queries
 | parameter | type | default | description | unit |
 |------|------|------|------|------|
 | startdate | long/int64   | 0 | Limit to tropical cyclones **started after** the specified time. <br> Effectively datapoints.0.time >= startdate | UNIX seconds |
@@ -317,3 +322,28 @@ The parsed data is small enough to fit in a free [MongoDB Atlas](https://www.mon
 ```
 </details>
 
+### Response Properties
+
+
+| property | type | unit | IBTrACS Column | description
+|------|------|------|------|------|
+| id | string | n/a | SID | Storm Identifier
+| name | string | n/a | NAME | A name provided by the agency. These can change over time.
+| active | boolean | n/a | n/a | Whether the storm is currently active or not.
+| maxSpeed | int | Knots | n/a | The maximum speed the storm has reached in its lifetime.
+| averageSpeed | float | Knots | n/a | The average speed of the storm throughout its lifetime.
+| datapoints | array | n/a | n/a | An array which holds some of the storm's data at different points in time
+
+* #### datapoints
+
+  | property | type | unit | IBTrACS Column | description
+  |------|------|------|------|------|
+  | lat | float | degrees north | LAT | The latitude at this timestamp.
+  | lon | float | degrees east | LON | The longitude at this timestamp.
+  | time | long | UNIX seconds | ISO_TIME (converted) | The UNIX timestamp of this data point.
+  | speed | int | Knots | STORM_SPEED | The speed at this timestamp.
+
+(1 Knot = 1.852km/h | 1.151mph)
+
+
+For information on IBTrACS columns, [click here](https://www.ncdc.noaa.gov/ibtracs/pdf/IBTrACS_version4_Technical_Details.pdf).
