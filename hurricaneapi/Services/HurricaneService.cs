@@ -25,15 +25,15 @@ namespace hurricaneapi.Services
             
             var filter = Builders<Hurricane>.Filter;
             
-            var startDateFilter = filter.Gte("datapoints.0.time", startdate);
-            var endDateFilter = filter.Lte("datapoints.0.time", enddate);
+            var startDateFilter = filter.Gte("firstActive", startdate);
+            var endDateFilter = filter.Lte("firstActive", enddate);
             var maxSpeedFilter = filter.Lte("maxSpeed", maxspeed);
             var activeFilter = filter.Eq("active", active == 1?true:false);
             var nameFilter = filter.Regex("name", new BsonRegularExpression(name.ToUpperInvariant()));
-            var sortDefinition = Builders<Hurricane>.Sort.Descending(hurricane => hurricane.id);
+            var sortDefinition = Builders<Hurricane>.Sort.Descending(hurricane => hurricane.firstActive);
             if (sortorder.Equals("asc"))
             {
-                sortDefinition = Builders<Hurricane>.Sort.Ascending(hurricane => hurricane.id);
+                sortDefinition = Builders<Hurricane>.Sort.Ascending(hurricane => hurricane.firstActive);
             }
 
             if (active != 0 && active != 1)

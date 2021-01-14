@@ -15,17 +15,28 @@ namespace hurricaneapi.Models
         [BsonElement("time")]
         [JsonPropertyName("time")]
         public long time { get; set; }
-        [BsonElement("speed")]
-        [JsonPropertyName("speed")]
-        public int speed { get; set; }
+        [BsonElement("stormSpeed")]
+        [JsonPropertyName("stormSpeed")]
+        public int stormSpeed { get; set; }
+        [BsonElement("windSpeed")]
+        [JsonPropertyName("windSpeed")]
+        public int windSpeed { get; set; }
+        [BsonElement("cat")] 
+        [JsonPropertyName("cat")]
+        public int category { get; set; }
+        [BsonElement("dist2land")] 
+        [JsonPropertyName("dist2land")]
+        public int distanceToLand { get; set; }
         
-        public DataPoints(double lat, double lon, long time, int speed)
+        public DataPoints(double lat, double lon, long time, int stormSpeed, int windSpeed, int category, int distanceToLand)
         {
-            
             this.lat = lat;
             this.lon = lon;
             this.time = time;
-            this.speed = speed;
+            this.stormSpeed = stormSpeed;
+            this.windSpeed = windSpeed;
+            this.category= category;
+            this.distanceToLand = distanceToLand;
         }
     }
     public class Hurricane
@@ -35,27 +46,31 @@ namespace hurricaneapi.Models
         [BsonElement("name")]
         [JsonPropertyName("name")]
         public string name { get; set; }
-        
-        [BsonElement("datapoints")]
-        [JsonPropertyName("datapoints")]
-        public IEnumerable<DataPoints> coordsList { get; set; }
         [BsonElement("active")]
         [JsonPropertyName("active")]
         public bool IsActive { get; set; }
         [BsonElement("maxSpeed")]
         [JsonPropertyName("maxSpeed")]
         public int maxSpeed {get; set;}
-        [BsonElement("averageSpeed")]
-        [JsonPropertyName("averageSpeed")]
-        public float averageSpeed { get; set; }
-        public Hurricane(string id,IEnumerable<DataPoints> coordsList, string name, bool IsActive, int maxSpeed, float averageSpeed)
+        [BsonElement("firstActive")]
+        [JsonPropertyName("firstActive")]
+        public long firstActive { get; set; }
+        [BsonElement("lastActive")]
+        [JsonPropertyName("lastActive")]
+        public long lastActive { get; set; }
+        [BsonElement("datapoints")]
+        [JsonPropertyName("datapoints")]
+        public IEnumerable<DataPoints> dataPointsEnumerable { get; set; }
+        public Hurricane(string id,IEnumerable<DataPoints> dataPointsEnumerable, string name, bool IsActive, 
+            int maxSpeed, long firstActive, long lastActive)
         {
             this.id = id;
-            this.coordsList = coordsList;
+            this.dataPointsEnumerable = dataPointsEnumerable;
             this.name = name;
             this.IsActive = IsActive;
             this.maxSpeed = maxSpeed;
-            this.averageSpeed = averageSpeed;
+            this.firstActive = firstActive;
+            this.lastActive = lastActive;
         }
         
         
