@@ -1,8 +1,11 @@
 # Sylph
 
-Sylph is an ASP.NET web service that parses tropical cyclone CSV data from [NOAA IBTrACS](https://www.ncdc.noaa.gov/ibtracs/ "NOAA IBTrACS"), stores it in a MongoDB database and provides a convenient RESTful API to access it. <br> **Currently WIP**
+Sylph is an ASP.NET web service that parses tropical cyclone CSV data from [NOAA IBTrACS](https://www.ncdc.noaa.gov/ibtracs/ "NOAA IBTrACS"), stores it in a MongoDB database and provides a RESTful API to access it. Sylph is highly configurable, but does not provide real-time data, as IBTrACS updates twice weekly.  <br>
+Sylph is free software licensed under AGPL-3.0-or-later. <br>
+**Currently WIP**
 
 #### Table of Contents
+
 * [Compilation](#Compilation)
   * [Prerequisites](#Prerequisites)
   * [Configuration](#Configuration)
