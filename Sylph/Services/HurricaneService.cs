@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using hurricaneapi.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Sylph.Models;
 
-namespace hurricaneapi.Services
+namespace Sylph.Services
 {
     public class HurricaneService
     {

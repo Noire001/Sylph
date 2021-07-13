@@ -1,7 +1,6 @@
-# hurricaneapi
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ad5fc727d6254510a068dc1cf0848a99)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Emoclaw/hurricaneapi&amp;utm_campaign=Badge_Grade)
+# Sylph
 
-hurricaneapi is an ASP.NET web service that parses tropical cyclone CSV data from [NOAA IBTrACS](https://www.ncdc.noaa.gov/ibtracs/ "NOAA IBTrACS"), stores it in a MongoDB database and provides a convenient RESTful API to access it. <br> **Currently WIP**
+Sylph is an ASP.NET web service that parses tropical cyclone CSV data from [NOAA IBTrACS](https://www.ncdc.noaa.gov/ibtracs/ "NOAA IBTrACS"), stores it in a MongoDB database and provides a convenient RESTful API to access it. <br> **Currently WIP**
 
 #### Table of Contents
 * [Compilation](#Compilation)
@@ -19,7 +18,7 @@ hurricaneapi is an ASP.NET web service that parses tropical cyclone CSV data fro
 
 ## Compilation
 ### Prerequisites
-[NET  5.0.1 SDK](https://dotnet.microsoft.com/download/dotnet/5.0 "NET  5.0.1 SDK")
+[.NET  5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0 ".NET  5 SDK")
 ### Configuration
 After cloning this repository, create an `appsettings.json` file at the project root folder with the following:
 ```json
@@ -31,18 +30,18 @@ After cloning this repository, create an `appsettings.json` file at the project 
   }
 }
 ```
-You must enter the above MongoDB details correctly between the empty quotation marks. The database and collection have to be created manually. hurricaneapi does not create them and will fail if they do not exist.
+Fill in the MongoDB details. The database and collection have to be created manually. Sylph does not create them and will fail if they do not exist.
 
 See: [Create a Database in MongoDB](https://www.mongodb.com/basics/create-database) 
 ### Build
-Simply build using your IDE (Visual Studio, Rider). You must create your own launch profile for local testing, if the one included doesn't work.
+Simply build using your IDE (Visual Studio, Rider) or dotnet. You must create your own launch profile for local testing, if the one included doesn't work.
 <br>The following NuGet packages are required:
 
 * `MongoDB.Driver` 2.11.3+
 * `Quartz` 3.2.2+
 * `Quartz.AspNetCore` 3.2.2+
 
-These should be installed automatically. If they aren't you have to install them manually.
+These should be installed automatically.
 
 ### Deploy
 Your deployment environment must support ASP.NET Core 5.0, like [Azure](https://azure.microsoft.com/ "Azure"). 
@@ -61,7 +60,7 @@ The parsed data is small enough to fit in a free [MongoDB Atlas](https://www.mon
 | maxspeed | ushort/int32  | Int32.MaxValue | Limit to tropical cyclones whose maximum speed has not exceeded this value | Knots |
 | active | short/int16 | 2 | Limit to tropical cyclones that are active, inactive or both. <br> `active=1` returns active tropical cyclones, `active=0` returns inactive ones. <br> Any other value returns both active and inactive.|
 | name | string | *empty* | Limit to tropical cyclones whose `name` field contains the specified string. |
-| sort | string | desc | sort tropical cyclones by asceding (`asc`) or descending (`desc`) order based on their ID (effectively starting time)
+| sort | string | desc | sort tropical cyclones by ascending (`asc`) or descending (`desc`) order based on their ID (effectively starting time)
 #### Sample Query
 `https://{host}/hurricane/api?startdate=1604447200&enddate=1608847400&active=1`
 

@@ -1,4 +1,4 @@
-namespace hurricaneapi.Models
+namespace Sylph.Models
 {
     public class HurricaneDatabaseSettings : HurricaneDatabaseSettings.IHurricaneDatabaseSettings
     {

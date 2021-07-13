@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using hurricaneapi.Models;
-using hurricaneapi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Sylph.Models;
+using Sylph.Services;
 
-namespace hurricaneapi.Controllers
+namespace Sylph.Controllers
 {
     [Route("[controller]")]
     [Controller]

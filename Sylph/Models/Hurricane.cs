@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace hurricaneapi.Models
+namespace Sylph.Models
 {
     public class DataPoints
     {

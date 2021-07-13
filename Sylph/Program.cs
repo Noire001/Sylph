@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace hurricaneapi
+namespace Sylph
 {
     public static class Program
     {

@@ -4,13 +4,13 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using hurricaneapi.Models;
 using Microsoft.VisualBasic.FileIO;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Quartz;
+using Sylph.Models;
 
-namespace hurricaneapi.Jobs
+namespace Sylph.Jobs
 {
     public class HurricaneCsvJob : IJob
     {

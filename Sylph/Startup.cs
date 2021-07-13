@@ -1,6 +1,3 @@
-using hurricaneapi.Jobs;
-using hurricaneapi.Models;
-using hurricaneapi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,8 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Quartz;
+using Sylph.Jobs;
+using Sylph.Models;
+using Sylph.Services;
 
-namespace hurricaneapi
+namespace Sylph
 {
     public class Startup
     {
